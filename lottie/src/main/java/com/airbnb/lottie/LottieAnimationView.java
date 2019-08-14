@@ -75,7 +75,7 @@ import java.util.Map;
       };
 
   private final LottieDrawable lottieDrawable = new LottieDrawable();
-  private CacheStrategy defaultCacheStrategy;
+  private CacheStrategy defaultCacheStrategy = CacheStrategy.Weak;
   private String animationName;
   private @RawRes int animationResId;
   private boolean wasAnimatingWhenDetached = false;
@@ -102,47 +102,10 @@ import java.util.Map;
   }
 
   private void init(@Nullable AttributeSet attrs) {
-    TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.LottieAnimationView);
-    int cacheStrategy = ta.getInt(
-        R.styleable.LottieAnimationView_lottie_cacheStrategy,
-        CacheStrategy.Weak.ordinal());
-    defaultCacheStrategy = CacheStrategy.values()[cacheStrategy];
-    if (!isInEditMode()) {
-      boolean hasRawRes = ta.hasValue(R.styleable.LottieAnimationView_lottie_rawRes);
-      boolean hasFileName = ta.hasValue(R.styleable.LottieAnimationView_lottie_fileName);
-      if (hasRawRes && hasFileName) {
-        throw new IllegalArgumentException("lottie_rawRes and lottie_fileName cannot be used at " +
-            "the same time. Please use use only one at once.");
-      } else if (hasRawRes) {
-        int rawResId = ta.getResourceId(R.styleable.LottieAnimationView_lottie_rawRes, 0);
-        if (rawResId != 0) {
-          setAnimation(rawResId);
-        }
-      } else if (hasFileName) {
-        String fileName = ta.getString(R.styleable.LottieAnimationView_lottie_fileName);
-        if (fileName != null) {
-          setAnimation(fileName);
-        }
-      }
-    }
-    if (ta.getBoolean(R.styleable.LottieAnimationView_lottie_autoPlay, false)) {
-      lottieDrawable.playAnimation();
-      autoPlay = true;
-    }
-    lottieDrawable.loop(ta.getBoolean(R.styleable.LottieAnimationView_lottie_loop, false));
-    setImageAssetsFolder(ta.getString(R.styleable.LottieAnimationView_lottie_imageAssetsFolder));
-    setProgress(ta.getFloat(R.styleable.LottieAnimationView_lottie_progress, 0));
-    enableMergePathsForKitKatAndAbove(ta.getBoolean(
-        R.styleable.LottieAnimationView_lottie_enableMergePathsForKitKatAndAbove, false));
-    if (ta.hasValue(R.styleable.LottieAnimationView_lottie_colorFilter)) {
-      addColorFilter(new SimpleColorFilter(ta.getColor(
-          R.styleable.LottieAnimationView_lottie_colorFilter, Color.TRANSPARENT)));
-    }
-    if (ta.hasValue(R.styleable.LottieAnimationView_lottie_scale)) {
-      lottieDrawable.setScale(ta.getFloat(R.styleable.LottieAnimationView_lottie_scale, 1f));
-    }
-
-    ta.recycle();
+    lottieDrawable.loop(false);
+    setImageAssetsFolder(null);
+    setProgress(0);
+    enableMergePathsForKitKatAndAbove(false);
 
     if (Utils.getAnimationScale(getContext()) == 0f) {
       lottieDrawable.systemAnimationsAreDisabled();
