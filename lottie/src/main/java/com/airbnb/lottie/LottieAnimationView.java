@@ -15,11 +15,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RawRes;
 import android.support.annotation.VisibleForTesting;
-import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
+import android.widget.ImageView;
 
 import com.airbnb.lottie.utils.Utils;
 
@@ -43,7 +43,7 @@ import java.util.Map;
  * You can manually set the progress of the animation with {@link #setProgress(float)} or
  * {@link R.attr#lottie_progress}
  */
-@SuppressWarnings({"unused", "WeakerAccess"}) public class LottieAnimationView extends AppCompatImageView {
+@SuppressWarnings({"unused", "WeakerAccess"}) public class LottieAnimationView extends ImageView {
   private static final String TAG = LottieAnimationView.class.getSimpleName();
 
   /**
